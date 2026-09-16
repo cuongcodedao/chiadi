@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChiaDi — bản dựng giao diện</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12302A; --paper:#EDF0EA; --surface:#FFFFFF; --accent:#0E7C66;
+  --danger:#B5451F; --muted:#5F6B63; --line:#D8DED4; --line-soft:#E4E8E1;
+  --chip:#E1EAE4; --field:#F4F6F2; --track:#E2E7DE; --placeholder:#9AA39C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:#DDE3DA;color:var(--ink);
+  font-variant-numeric:tabular-nums;padding:32px 20px 60px}
+.head{max-width:1240px;margin:0 auto 28px}
+.head h1{font-size:22px;font-weight:500}
+.head p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.6;max-width:620px}
+.grid{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:26px}
+.item{width:320px}
+.cap{font-size:12px;color:#44514A;margin-bottom:8px;letter-spacing:.2px}
+.phone{width:320px;background:var(--paper);border:1px solid var(--line);border-radius:22px;
+  overflow:hidden;box-shadow:0 1px 3px rgba(18,48,42,.08)}
+.sheet{background:var(--surface);border-radius:18px 18px 0 0;padding:16px 18px 24px}
+.grab{width:36px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 16px}
+.scrim{background:rgba(18,48,42,.28)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.gname{font-size:16px;font-weight:500;line-height:1.3}
+.sub{font-size:12px;color:var(--muted)}
+.icon{width:34px;height:34px;border-radius:17px;background:var(--surface);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:14px}
+.pad{padding:0 16px}
+.hero{padding:18px 16px 16px}
+.hero .lbl{font-size:13px;color:var(--muted)}
+.big{font-size:36px;font-weight:500;line-height:1.15;letter-spacing:-.5px;margin-top:2px}
+.neg{color:var(--danger)} .pos{color:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.row+.row{border-top:1px solid var(--line-soft)}
+.av{width:34px;height:34px;border-radius:17px;background:var(--chip);display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:500;flex:none}
+.grow{flex:1;min-width:0}
+.t15{font-size:15px} .t14{font-size:14px} .t13{font-size:13px} .t12{font-size:12px}
+.m{color:var(--muted)} .b{font-weight:500}
+.btn{background:var(--ink);color:#fff;text-align:center;font-size:15px;font-weight:500;
+  padding:14px;border-radius:12px}
+.btn.green{background:var(--accent)}
+.btn.off{background:var(--line-soft);color:var(--placeholder)}
+.pill{background:var(--accent);color:#fff;font-size:13px;padding:7px 12px;border-radius:8px}
+.tabs{display:flex;background:var(--track);border-radius:9px;padding:3px}
+.tabs div{flex:1;text-align:center;font-size:13px;padding:7px 0;color:var(--muted)}
+.tabs div.on{background:var(--surface);border-radius:7px;color:var(--ink);font-weight:500}
+.list{padding:10px 16px 0}
+.li{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #DFE4DB}
+.li:last-child{border-bottom:0}
+.right{text-align:right;flex:none}
+.field{background:var(--field);border:1px solid var(--line-soft);border-radius:10px;
+  padding:11px 13px;font-size:15px}
+.field.white{background:var(--surface);border-color:var(--line)}
+.lbl{font-size:13px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-size:13px}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.sel{background:var(--chip);border-color:var(--accent)}
+.chip.tag{background:var(--chip);border:0;display:flex;gap:5px;align-items:center}
+.amt{font-size:34px;font-weight:500;letter-spacing:-.5px;border-bottom:2px solid var(--accent);padding-bottom:6px}
+.amt.idle{border-bottom-color:var(--line-soft)}
+.warn{background:#FBEDE7;color:var(--danger);font-size:13px;padding:10px 12px;border-radius:9px}
+.inline{display:flex;align-items:center;gap:10px}
+.num{width:118px;background:var(--field);border:1px solid var(--line-soft);border-radius:9px;
+  padding:9px 11px;font-size:15px;text-align:right}
+.stack{display:flex;flex-direction:column;gap:8px}
+.gap7{display:flex;flex-direction:column;gap:7px}
+.opt{border:1px solid var(--line);border-radius:10px;padding:12px 13px;font-size:15px;
+  display:flex;align-items:center;gap:10px}
+.foot{padding:12px 16px 16px;border-top:1px solid #DFE4DB}
+.qr{width:168px;height:168px;margin:16px auto 0;background:var(--field);
+  border:1px solid var(--line-soft);border-radius:12px;display:grid;place-items:center;font-size:76px}
+.center{text-align:center}
+.mt4{margin-top:4px}.mt6{margin-top:6px}.mt8{margin-top:8px}.mt10{margin-top:10px}
+.mt12{margin-top:12px}.mt14{margin-top:14px}.mt16{margin-top:16px}.mt18{margin-top:18px}
+.empty{padding:44px 22px 0;text-align:center}
+.blob{width:52px;height:52px;border-radius:26px;background:var(--chip);margin:0 auto;
+  display:grid;place-items:center;font-size:24px}
+.act{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid #DFE4DB}
+.act:last-child{border-bottom:0}
+.sym{font-size:15px;color:var(--muted);width:18px;text-align:center}
+.me{background:#F2F6F3;border-radius:7px;margin:0 -8px;padding:6px 8px}
+.bal{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #DFE4DB}
+.bal:last-child{border-bottom:0}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>ChiaDi — bản dựng giao diện</h1>
+  <p>Tài liệu tham chiếu cho việc dựng UI. Màu, cỡ chữ và khoảng cách trong file này là nguồn
+  chuẩn duy nhất. Tất cả biến màu khai báo ở <code>:root</code>. Khung điện thoại 320px,
+  bản thật rộng 380–430px và desktop giới hạn 520px căn giữa.</p>
+</div>
+
+<div class="grid">
+
+<!-- 1 -->
+<div class="item"><div class="cap">1 · Trang chủ — tạo nhóm</div>
+<div class="phone">
+  <div style="padding:26px 18px 18px">
+    <div class="inline"><div style="width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:14px">₫</div><span style="font-size:17px;font-weight:500">ChiaDi</span></div>
+    <p class="t14 m mt10" style="line-height:1.5">Chia tiền nhóm bằng một đường link. Không cần cài app.</p>
+  </div>
+  <div style="padding:0 18px 18px">
+    <div class="lbl">Tên nhóm</div>
+    <div class="field white mt6">Đà Lạt 3N2Đ</div>
+    <div class="lbl mt16">Thành viên</div>
+    <div class="field white mt6" style="padding:10px">
+      <div class="chips">
+        <span class="chip tag">Minh <span class="m">✕</span></span>
+        <span class="chip tag">Hùng <span class="m">✕</span></span>
+        <span class="chip tag">Lân <span class="m">✕</span></span>
+        <span class="chip tag">Huy <span class="m">✕</span></span>
+        <span class="chip tag">Trang <span class="m">✕</span></span>
+        <span class="t13" style="color:var(--placeholder);padding:5px 4px">Gõ tên rồi Enter</span>
+      </div>
+    </div>
+    <p class="t12 m mt8">Thêm cả tên bạn. Ai thiếu thì bổ sung sau cũng được.</p>
+    <div class="btn mt18">Tạo nhóm</div>
+  </div>
+</div></div>
+
+<!-- 2 -->
+<div class="item"><div class="cap">2 · Chọn tên — hiện ngay lần đầu mở link</div>
+<div class="phone">
+  <div class="bar" style="opacity:.35"><div><div class="gname">Đà Lạt 3N2Đ</div><div class="sub">5 thành viên</div></div></div>
+  <div class="scrim" style="height:88px"></div>
+  <div class="sheet">
+    <div class="grab"></div>
+    <div style="font-size:18px;font-weight:500">Bạn là ai trong nhóm?</div>
+    <p class="t13 m mt4" style="line-height:1.5">Chọn tên để xem bạn đang nợ hay được nhận.</p>
+    <div class="gap7 mt14">
+      <div class="opt"><span class="av">M</span>Minh</div>
+      <div class="opt"><span class="av">H</span>Hùng</div>
+      <div class="opt"><span class="av">L</span>Lân</div>
+      <div class="opt"><span class="av">H</span>Huy</div>
+      <div class="opt"><span class="av">T</span>Trang</div>
+    </div>
+    <p class="center t14 mt16" style="color:var(--accent)">Tên tôi chưa có trong danh sách</p>
+  </div>
+</div></div>
+
+<!-- 3 -->
+<div class="item"><div class="cap">3 · Trang nhóm — màn hình chính</div>
+<div class="phone">
+  <div class="bar">
+    <div><div class="gname">Đà Lạt 3N2Đ</div><div class="sub">5 thành viên</div></div>
+    <div class="inline" style="gap:6px"><div class="icon">↗</div><div class="icon">⋯</div></div>
+  </div>
+  <div class="hero">
+    <div class="lbl">Bạn đang</div>
+    <div class="big neg">nợ 450.000đ</div>
+    <div class="card mt14">
+      <div class="row">
+        <span class="av">M</span>
+        <div class="grow"><div class="t15">Trả Minh</div><div class="t15 b" style="font-size:16px">280.000đ</div></div>
+        <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+          <span class="pill">Quét QR</span><span class="t12 m">Đã chuyển</span>
+        </div>
+      </div>
+      <div class="row">
+        <span class="av">T</span>
+        <div class="grow"><div class="t15">Trả Trang</div><div class="t15 b" style="font-size:16px">170.000đ</div></div>
+        <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+          <span class="pill">Quét QR</span><span class="t12 m">Đã chuyển</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pad"><div class="tabs"><div class="on">Khoản chi</div><div>Số dư cả nhóm</div></div></div>
+  <div class="list">
+    <div class="li"><div class="grow"><div class="t15">Ăn tối quán nướng</div><div class="t12 m mt4">Minh trả · chia cho 5 người</div></div><div class="right"><div class="t15 b">850.000đ</div><div class="t12 m mt4">Hôm qua</div></div></div>
+    <div class="li"><div class="grow"><div class="t15">Tiền phòng homestay</div><div class="t12 m mt4">Trang và Hùng trả · chia cho 5 người</div></div><div class="right"><div class="t15 b">1.800.000đ</div><div class="t12 m mt4">Hôm qua</div></div></div>
+    <div class="li"><div class="grow"><div class="t15">Cà phê sáng</div><div class="t12 m mt4">Bạn trả · chia cho 3 người</div></div><div class="right"><div class="t15 b">165.000đ</div><div class="t12 m mt4">08:40</div></div></div>
+    <div class="li"><div class="grow"><div class="t15">Xăng xe</div><div class="t12 m mt4">Huy trả · chia theo suất</div></div><div class="right"><div class="t15 b">420.000đ</div><div class="t12 m mt4">08:05</div></div></div>
+  </div>
+  <div class="foot mt4"><div class="btn">Thêm khoản chi</div></div>
+</div></div>
+
+<!-- 4 -->
+<div class="item"><div class="cap">4 · Thêm khoản chi — chia đều</div>
+<div class="phone" style="background:var(--surface)">
+  <div style="padding:16px 18px 0">
+    <div class="grab"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:17px;font-weight:500">Thêm khoản chi</span><span class="m" style="font-size:18px">✕</span>
+    </div>
+  </div>
+  <div style="padding:16px 18px 0">
+    <div class="lbl">Số tiền</div>
+    <div class="amt mt4">850.000<span style="font-size:22px;color:var(--muted)">đ</span></div>
+    <div class="field mt14">Ăn tối quán nướng</div>
+
+    <div class="lbl mt16">Ai trả?</div>
+    <div class="chips mt8"><span class="chip on">Minh</span><span class="chip">Hùng</span><span class="chip">Lân</span><span class="chip">Huy</span><span class="chip">Trang</span></div>
+    <p class="t13 mt8" style="color:var(--accent)">Nhiều người cùng trả</p>
+
+    <div style="display:flex;justify-content:space-between;align-items:center" class="mt16">
+      <span class="lbl">Chia cho ai?</span><span class="t13" style="color:var(--accent)">Bỏ chọn tất cả</span>
+    </div>
+    <div class="chips mt8"><span class="chip sel">✓ Minh</span><span class="chip sel">✓ Hùng</span><span class="chip sel">✓ Lân</span><span class="chip sel">✓ Huy</span><span class="chip sel">✓ Trang</span></div>
+
+    <div class="tabs mt16"><div class="on">Chia đều</div><div>Nhập tay</div><div>Theo suất</div></div>
+    <p class="center t13 m mt10">Mỗi người 170.000đ</p>
+  </div>
+  <div style="padding:16px 18px 18px"><div class="btn">Lưu khoản chi</div></div>
+</div></div>
+
+<!-- 5 -->
+<div class="item"><div class="cap">5 · Thêm khoản chi — nhập tay, tổng chưa khớp</div>
+<div class="phone" style="background:var(--surface)">
+  <div style="padding:16px 18px 0">
+    <div class="grab"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:17px;font-weight:500">Thêm khoản chi</span><span class="m" style="font-size:18px">✕</span>
+    </div>
+  </div>
+  <div style="padding:16px 18px 0">
+    <div class="lbl">Số tiền</div>
+    <div class="amt idle mt4">850.000<span style="font-size:22px;color:var(--muted)">đ</span></div>
+    <div class="field mt14">Ăn tối quán nướng</div>
+    <div class="tabs mt16"><div>Chia đều</div><div class="on">Nhập tay</div><div>Theo suất</div></div>
+    <div class="stack mt12">
+      <div class="inline"><span class="grow t15">Minh</span><span class="num">250.000đ</span></div>
+      <div class="inline"><span class="grow t15">Hùng</span><span class="num">200.000đ</span></div>
+      <div class="inline"><span class="grow t15">Lân</span><span class="num">200.000đ</span></div>
+      <div class="inline"><span class="grow t15">Huy</span><span class="num">120.000đ</span></div>
+      <div class="inline"><span class="grow t15">Trang</span><span class="num" style="color:var(--placeholder)">0đ</span></div>
+      <div class="warn">Còn thiếu 80.000đ chưa chia</div>
+    </div>
+  </div>
+  <div style="padding:16px 18px 18px"><div class="btn off">Lưu khoản chi</div></div>
+</div></div>
+
+<!-- 6 -->
+<div class="item"><div class="cap">6 · Tab số dư cả nhóm</div>
+<div class="phone">
+  <div class="bar"><div><div class="gname">Đà Lạt 3N2Đ</div><div class="sub">5 thành viên</div></div><div class="icon">↗</div></div>
+  <div class="pad mt14"><div class="tabs"><div>Khoản chi</div><div class="on">Số dư cả nhóm</div></div></div>
+  <div class="list">
+    <div class="bal"><span class="inline"><span class="av">L</span><span class="t15">Lân</span></span><span class="t15 b neg">−620.000đ</span></div>
+    <div class="bal"><span class="inline"><span class="av">H</span><span class="t15">Hùng <span class="t13 m">· bạn</span></span></span><span class="t15 b neg">−450.000đ</span></div>
+    <div class="bal"><span class="inline"><span class="av">H</span><span class="t15">Huy</span></span><span class="t15 m">0đ</span></div>
+    <div class="bal"><span class="inline"><span class="av">T</span><span class="t15">Trang</span></span><span class="t15 b pos">+390.000đ</span></div>
+    <div class="bal"><span class="inline"><span class="av">M</span><span class="t15">Minh</span></span><span class="t15 b pos">+680.000đ</span></div>
+  </div>
+  <div style="margin:14px 16px 0" class="card" >
+    <div style="padding:14px">
+      <div class="t14 b">Cách trả gọn nhất</div>
+      <div class="t12 m mt4">3 lần chuyển thay vì 8</div>
+      <div class="stack mt12">
+        <div class="inline t14"><span>Lân</span><span class="m">→</span><span>Minh</span><span style="margin-left:auto" class="b">400.000đ</span></div>
+        <div class="inline t14"><span>Lân</span><span class="m">→</span><span>Trang</span><span style="margin-left:auto" class="b">220.000đ</span></div>
+        <div class="inline t14 me"><span>Hùng</span><span class="m">→</span><span>Minh</span><span style="margin-left:auto" class="b">280.000đ</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot mt14"><div class="btn">Thêm khoản chi</div></div>
+</div></div>
+
+<!-- 7 -->
+<div class="item"><div class="cap">7 · Nhóm vừa tạo — chưa có khoản chi</div>
+<div class="phone">
+  <div class="bar"><div><div class="gname">Đà Lạt 3N2Đ</div><div class="sub">5 thành viên</div></div><div class="icon">↗</div></div>
+  <div class="empty">
+    <div class="blob">🧾</div>
+    <div style="font-size:17px;font-weight:500" class="mt14">Bắt đầu với khoản đầu tiên</div>
+    <p class="t14 m mt6" style="line-height:1.5">Gửi link cho cả nhóm để ai cũng tự thêm được khoản mình đã trả.</p>
+  </div>
+  <div style="padding:20px 18px 0">
+    <div class="btn">Gửi link cho cả nhóm</div>
+    <p class="center t14 mt14" style="color:var(--accent)">Thêm khoản chi</p>
+  </div>
+  <div style="margin:22px 18px 18px" class="card">
+    <div class="row" style="padding:12px 14px">
+      <span class="m">🔗</span>
+      <span class="grow t13 m" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">chiadi.vn/g/x7k2m9p</span>
+      <span class="t13 b" style="color:var(--accent)">Chép</span>
+    </div>
+  </div>
+</div></div>
+
+<!-- 8 -->
+<div class="item"><div class="cap">8 · Mã QR chuyển khoản</div>
+<div class="phone">
+  <div class="scrim" style="height:56px"></div>
+  <div class="sheet center">
+    <div class="grab"></div>
+    <div class="t13 m">Chuyển cho Minh</div>
+    <div style="font-size:30px;font-weight:500;letter-spacing:-.5px" class="mt4">280.000đ</div>
+    <div class="qr">▦</div>
+    <div class="t14 mt14">Vietcombank · 0071000123456</div>
+    <div class="t13 m mt4">NGUYEN VAN MINH</div>
+    <div class="t13 m mt8">Nội dung: DA LAT 3N2D HUNG</div>
+    <div class="btn green mt18">Mở app ngân hàng</div>
+    <div class="t14 mt14">Đánh dấu đã chuyển</div>
+  </div>
+</div></div>
+
+<!-- 9 -->
+<div class="item"><div class="cap">9 · Tài khoản nhận tiền</div>
+<div class="phone" style="background:var(--surface)">
+  <div style="padding:16px 18px 0">
+    <div class="grab"></div>
+    <div style="font-size:17px;font-weight:500">Tài khoản nhận tiền</div>
+    <p class="t13 m mt4" style="line-height:1.5">Chỉ các thành viên trong nhóm nhìn thấy thông tin này.</p>
+  </div>
+  <div style="padding:16px 18px 0">
+    <div class="lbl">Ngân hàng</div>
+    <div class="field mt6" style="display:flex;justify-content:space-between">Vietcombank <span class="m">⌄</span></div>
+    <div class="lbl mt14">Số tài khoản</div>
+    <div class="field mt6">0071000123456</div>
+    <div class="lbl mt14">Tên chủ tài khoản</div>
+    <div class="field mt6">NGUYEN VAN MINH</div>
+    <p class="t12 m mt12">Tên viết hoa, không dấu</p>
+  </div>
+  <div style="padding:18px"><div class="btn">Lưu</div></div>
+</div></div>
+
+<!-- 10 -->
+<div class="item"><div class="cap">10 · Lịch sử thay đổi</div>
+<div class="phone">
+  <div class="bar" style="justify-content:flex-start;gap:12px"><span style="font-size:18px">←</span><span class="gname">Lịch sử thay đổi</span></div>
+  <div style="padding:6px 16px 18px">
+    <div class="t12 m mt12">Hôm nay</div>
+    <div class="act"><span class="sym" style="color:var(--accent)">✓</span><div><div class="t14" style="line-height:1.45">Huy đánh dấu đã chuyển 210.000đ cho Trang</div><div class="t12 m mt4">14:32</div></div></div>
+    <div class="act"><span class="sym">+</span><div><div class="t14" style="line-height:1.45">Bạn thêm khoản Cà phê sáng · 165.000đ</div><div class="t12 m mt4">08:40</div></div></div>
+    <div class="act"><span class="sym">✎</span><div><div class="t14" style="line-height:1.45">Minh sửa Ăn tối quán nướng từ 800.000đ thành 850.000đ</div><div class="t12 m mt4">08:12</div></div></div>
+    <div class="t12 m mt16">Hôm qua</div>
+    <div class="act"><span class="sym">+</span><div><div class="t14" style="line-height:1.45">Trang thêm khoản Tiền phòng homestay · 1.800.000đ</div><div class="t12 m mt4">21:05</div></div></div>
+    <div class="act"><span class="sym">👤</span><div><div class="t14" style="line-height:1.45">Lân tham gia nhóm</div><div class="t12 m mt4">19:48</div></div></div>
+    <div class="act"><span class="sym">⚑</span><div><div class="t14" style="line-height:1.45">Minh tạo nhóm Đà Lạt 3N2Đ</div><div class="t12 m mt4">19:40</div></div></div>
+  </div>
+</div></div>
+
+</div>
+</body>
+</html>
